@@ -58,6 +58,7 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
     ui->lineEdit_a->setText("");
     ui->lineEdit_b->setText("");
     ui->lineEdit_c->setText("");
+    ui->plainTextEdit_res->setPlainText("");
     ui->lineEdit_a->setEnabled(ws[index].a);
     ui->lineEdit_b->setEnabled(ws[index].b);
     ui->lineEdit_c->setEnabled(ws[index].c);
