@@ -12,9 +12,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     ws.push_back(win_setup(true,true,false,"a = ","b = ",""));
     ws.push_back(win_setup(true,true,false,"a = ","b = ",""));
+    ws.push_back(win_setup(true,true,true,"a = ","b = ","основание"));
 
     alg_names   << "Карацуба"
-                << "Алгоритм Евклида";
+                << "Алгоритм Евклида"
+                << "Остаток от умножения";
     ui->comboBox->addItems(alg_names);
 
 }
@@ -35,7 +37,7 @@ void MainWindow::on_pushButton_clicked()
         std::vector <long*> *res = new std::vector <long*>;
         long long mul = karatsuba(ui->lineEdit_a->text().toLongLong(),ui->lineEdit_b->text().toLongLong(),res);
         text += "Результат: " + QString::number(mul) + "\n";
-        text += "a\tb\tn\tA1\tB1\tA\tA0\tB0\tB\tta\ttb\tC\n";
+        text += "a\tb\tn\tA1\tB1\tA\tA0\tB0\tB\tta\ttb\tC\n\n";
         for (size_t i = 0; i<res->size(); i++)
         {
             for (int j = 0; j < 12; j++)
@@ -53,7 +55,7 @@ void MainWindow::on_pushButton_clicked()
 
         text += "НОД: " + QString::number(nod) + " = " +
                 QString::number((*res)[0][4]) + " * (" + QString::number((*res)[res->size()-2][2]) + ") + " +
-                QString::number((*res)[1][4]) + " * (" + QString::number((*res)[res->size()-2][3]) + ")\n";
+                QString::number((*res)[1][4]) + " * (" + QString::number((*res)[res->size()-2][3]) + ")\n\n";
         text += "i\tq\tu\tv\tr\n";
         for (size_t i = 0; i<res->size(); i++)
         {
@@ -63,6 +65,23 @@ void MainWindow::on_pushButton_clicked()
             }
             text += "\n";
         }
+        break;
+    }
+    case REM_MUL:
+    {
+        std::vector <long*> *res = new std::vector <long*>;
+        long long mul = rem_mul(ui->lineEdit_a->text().toLongLong(),ui->lineEdit_b->text().toLongLong(),ui->lineEdit_c->text().toLongLong(),res);
+        text += "Результат: " + QString::number(mul) + "\n";
+        text += "i\ta\tb\tc\n";
+        for (size_t i = 0; i<res->size(); i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                text +=  QString::number((*res)[i][j]) + "\t";
+            }
+            text += "\n";
+        }
+
         break;
     }
     default:

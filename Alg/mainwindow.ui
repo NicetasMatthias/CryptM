@@ -56,6 +56,9 @@
       <height>431</height>
      </rect>
     </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_c">
     <property name="geometry">
@@ -118,6 +121,14 @@
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>comboBox</tabstop>
+  <tabstop>lineEdit_a</tabstop>
+  <tabstop>lineEdit_b</tabstop>
+  <tabstop>lineEdit_c</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>plainTextEdit_res</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

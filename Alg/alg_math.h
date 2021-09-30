@@ -3,12 +3,14 @@
 
 #include <karatsuba.h>
 #include <euclid.h>
+#include <rem_mul.h>
 
 
 enum alg_names
 {
     KARATSUBA = 0,
     EUCLID,
+    REM_MUL,
 
 };
 

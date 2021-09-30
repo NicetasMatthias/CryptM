@@ -12,13 +12,15 @@ SOURCES += \
     euclid.cpp \
     karatsuba.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    rem_mul.cpp
 
 HEADERS += \
     alg_math.h \
     euclid.h \
     karatsuba.h \
-    mainwindow.h
+    mainwindow.h \
+    rem_mul.h
 
 FORMS += \
     mainwindow.ui
