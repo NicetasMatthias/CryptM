@@ -1,6 +1,21 @@
 #include <karatsuba.h>
 
 
+/* 0 - a
+ * 1 - b
+ * 2 - n
+ * 3 - A1
+ * 4 - B1
+ * 5 - A
+ * 6 - A0
+ * 7 - B0
+ * 8 - B
+ * 9 - tA
+ * 10 - tB
+ * 11 - C
+ */
+
+
 long karatsuba_sub(long long a,long long b, size_t *i, std::vector <long*> *res)
 {
     size_t tmp_i = *i;

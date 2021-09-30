@@ -11,8 +11,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     ws.push_back(win_setup(true,true,false,"a = ","b = ",""));
+    ws.push_back(win_setup(true,true,false,"a = ","b = ",""));
 
-    alg_names   << "Карацуба";
+    alg_names   << "Карацуба"
+                << "Алгоритм Евклида";
     ui->comboBox->addItems(alg_names);
 
 }
@@ -37,6 +39,25 @@ void MainWindow::on_pushButton_clicked()
         for (size_t i = 0; i<res->size(); i++)
         {
             for (int j = 0; j < 12; j++)
+            {
+                text +=  QString::number((*res)[i][j]) + "\t";
+            }
+            text += "\n";
+        }
+        break;
+    }
+    case EUCLID:
+    {
+        std::vector <long*> *res = new std::vector <long*>;
+        long long nod = euclid(ui->lineEdit_a->text().toLongLong(),ui->lineEdit_b->text().toLongLong(),res);
+
+        text += "НОД: " + QString::number(nod) + " = " +
+                QString::number((*res)[0][4]) + " * (" + QString::number((*res)[res->size()-2][2]) + ") + " +
+                QString::number((*res)[1][4]) + " * (" + QString::number((*res)[res->size()-2][3]) + ")\n";
+        text += "i\tq\tu\tv\tr\n";
+        for (size_t i = 0; i<res->size(); i++)
+        {
+            for (int j = 0; j < 5; j++)
             {
                 text +=  QString::number((*res)[i][j]) + "\t";
             }
