@@ -12,11 +12,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     ws.push_back(win_setup(true,true,false,"a = ","b = ",""));
     ws.push_back(win_setup(true,true,false,"a = ","b = ",""));
-    ws.push_back(win_setup(true,true,true,"a = ","b = ","основание"));
+    ws.push_back(win_setup(true,true,true,"a = ","b = ","модуль"));
+    ws.push_back(win_setup(true,true,true,"показатель","основание","модуль"));
 
     alg_names   << "Карацуба"
                 << "Алгоритм Евклида"
-                << "Остаток от умножения";
+                << "Остаток от умножения"
+                << "Остаток от степени";
     ui->comboBox->addItems(alg_names);
 
 }
@@ -71,6 +73,23 @@ void MainWindow::on_pushButton_clicked()
     {
         std::vector <long*> *res = new std::vector <long*>;
         long long mul = rem_mul(ui->lineEdit_a->text().toLongLong(),ui->lineEdit_b->text().toLongLong(),ui->lineEdit_c->text().toLongLong(),res);
+        text += "Результат: " + QString::number(mul) + "\n";
+        text += "i\ta\tb\tc\n";
+        for (size_t i = 0; i<res->size(); i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                text +=  QString::number((*res)[i][j]) + "\t";
+            }
+            text += "\n";
+        }
+
+        break;
+    }
+    case REM_EXP:
+    {
+        std::vector <long*> *res = new std::vector <long*>;
+        long long mul = rem_exp(ui->lineEdit_a->text().toLongLong(),ui->lineEdit_b->text().toLongLong(),ui->lineEdit_c->text().toLongLong(),res);
         text += "Результат: " + QString::number(mul) + "\n";
         text += "i\ta\tb\tc\n";
         for (size_t i = 0; i<res->size(); i++)

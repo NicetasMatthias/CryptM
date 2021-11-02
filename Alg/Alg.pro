@@ -13,6 +13,7 @@ SOURCES += \
     karatsuba.cpp \
     main.cpp \
     mainwindow.cpp \
+    rem_exp.cpp \
     rem_mul.cpp
 
 HEADERS += \
@@ -20,6 +21,7 @@ HEADERS += \
     euclid.h \
     karatsuba.h \
     mainwindow.h \
+    rem_exp.h \
     rem_mul.h
 
 FORMS += \

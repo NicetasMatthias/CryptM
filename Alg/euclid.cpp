@@ -35,14 +35,16 @@ long euclid (long long a, long long b, std::vector<long *> *res)
         tmp[3] = (*res)[i-2][3] - (*res)[i-1][3]*tmp[1];
         tmp[4] = (*res)[i-2][4] % (*res)[i-1][4];
 
-        res->push_back(tmp);
+
 
         if (tmp[4] == 0)
         {
+            delete [] tmp;
             break;
         }
         else
         {
+            res->push_back(tmp);
             i++;
         }
     }
