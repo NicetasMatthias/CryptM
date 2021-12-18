@@ -6,6 +6,8 @@
 
 #include <alg_math.h>
 
+#include <poly.h>
+
 struct win_setup
 {
     bool a;
@@ -47,4 +49,6 @@ private:
     QStringList alg_names;
     std::vector <win_setup> ws;
 };
+
+QString poly_vec_to_text(std::vector<Poly *> *res, std::vector<QString> names, int size);
 #endif // MAINWINDOW_H

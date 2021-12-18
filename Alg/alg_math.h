@@ -13,6 +13,7 @@ enum alg_names
     EUCLID,
     REM_MUL,
     REM_EXP,
+    TEST,
 
 };
 
