@@ -44,6 +44,10 @@ Poly Poly::norm_Z(int Z)
     Poly tmp = *this;
     for(size_t i = 0; i <= tmp.degree; i++)
     {
+        while (tmp.coeff[i]<0)
+        {
+            tmp.coeff[i] += Z;
+        }
         tmp.coeff[i] = tmp.coeff[i]%Z;
     }
     return tmp.norm_deg();
