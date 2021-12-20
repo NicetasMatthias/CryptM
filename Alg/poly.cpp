@@ -11,7 +11,7 @@ QString Poly::to_text()
     {
         if (i != 0)
         {
-            tmp += "x^" + QString::number(i) + "*(" + QString::number(this->coeff[i]) + ")" + " + ";
+            tmp += "(" + QString::number(this->coeff[i]) + ")" + "x^" + QString::number(i) + " + ";
         }
         else
         {
@@ -44,7 +44,7 @@ Poly Poly::norm_Z(int Z)
     Poly tmp = *this;
     for(size_t i = 0; i <= tmp.degree; i++)
     {
-        while (tmp.coeff[i]<0)
+        while (tmp.coeff[i]<=0)
         {
             tmp.coeff[i] += Z;
         }
@@ -57,7 +57,7 @@ Poly Poly::norm_ext(int Z, Poly P)
 {
     Poly rm,rz;
     poly_div(*this,P,&rz,&rm,Z);
-    return rm;
+    return rm.norm_Z(Z);
 }
 
 Poly Poly::operator-() const
@@ -145,93 +145,180 @@ void poly_div(Poly t1, Poly t2, Poly *rez, Poly *rem, int Z)
     }
     r.degree = t1.degree - t2.degree;
     Poly tmp = t1;
-    while (tmp.degree >= t2.degree)
+    while (tmp.degree >= t2.degree && tmp.degree!=0)
     {
         std::vector <long*> *res = new std::vector <long*>;
         euclid(Z,t2.coeff[t2.degree],res);
 
-//        Poly tmp_del = (tmp.coeff[tmp.degree] * ((*res)[(*res).size()-1][3])  ) *t2;
-        //int temp_int = (*res)[(*res).size()-1][3];
+
         Poly tmp_del = (tmp.coeff[tmp.degree] * (*res)[(*res).size()-1][3]) *t2;
         int dif = tmp.degree-tmp_del.degree;
         tmp_del.degree += dif;
-        r.coeff.insert(r.coeff.begin(),tmp.coeff[tmp.degree]* (*res)[(*res).size()-1][3]);
+        r.coeff.insert(r.coeff.begin(), tmp.coeff[tmp.degree] * (*res)[(*res).size()-1][3]);
         for (unsigned int i = 0; i < (dif); i++)
         {
             tmp_del.coeff.insert(tmp_del.coeff.begin(),0);
         }
         tmp = (tmp-tmp_del);
-        tmp = tmp.norm_Z(Z);
+        tmp.coeff[tmp.degree] %= Z;
+        if (tmp.coeff[tmp.degree] == 0 && tmp.degree!=0)
+        {
+            tmp.coeff.erase(tmp.coeff.begin()+tmp.degree);
+            tmp.degree--;
+        }
+    }
+    if (tmp.degree == 0 && (r.coeff.size()-1)!=r.degree)
+    {
+        r.coeff.insert(r.coeff.begin(),tmp.coeff[0]/t2.coeff[0]);
+        tmp.coeff[0] = tmp.coeff[0]%t2.coeff[0];
     }
     *rem = tmp.norm_Z(Z);
     *rez = r.norm_Z(Z);
 
 }
 
-Poly euclidP(Poly a, Poly b, std::vector<Poly *> *res, unsigned int Z)
+Poly euclidP(Poly a, Poly b, std::vector<std::vector<Poly>> *res, unsigned int Z)
 {
-    Poly *ta = new Poly[5];
-    Poly *tb = new Poly[5];
+    std::vector <Poly> ta,tb;
+    //Poly *tb = new Poly[5];
 
-    ta[0].coeff.push_back(0);
-    ta[0].degree = 0;
+    Poly tmp;
 
-    ta[1].coeff.push_back(0);
-    ta[1].degree = 0;
+    tmp.coeff.push_back(0);
+    tmp.degree = 0;
+    ta.push_back(tmp);
+    tmp.coeff.clear();
+
+    tmp.coeff.push_back(0);
+    tmp.degree = 0;
+    ta.push_back(tmp);
+    tmp.coeff.clear();
 
 
-    ta[2].coeff.push_back(1);
-    ta[2].degree = 0;
+    tmp.coeff.push_back(1);
+    tmp.degree = 0;
+    ta.push_back(tmp);
+    tmp.coeff.clear();
 
-    ta[3].coeff.push_back(0);
-    ta[3].degree = 0;
+    tmp.coeff.push_back(0);
+    tmp.degree = 0;
+    ta.push_back(tmp);
+    tmp.coeff.clear();
 
-    ta[4] = a;
+    ta.push_back(a);
     (*res).push_back(ta);
 
-    tb[0].coeff.push_back(1);
-    tb[0].degree = 0;
 
-    tb[1].coeff.push_back(0);
-    tb[1].degree = 0;
 
-    tb[2].coeff.push_back(0);
-    tb[2].degree = 0;
+    tmp.coeff.push_back(1);
+    tmp.degree = 0;
+    tb.push_back(tmp);
+    tmp.coeff.clear();
 
-    tb[3].coeff.push_back(1);
-    tb[3].degree = 0;
+    tmp.coeff.push_back(0);
+    tmp.degree = 0;
+    tb.push_back(tmp);
+    tmp.coeff.clear();
 
-    tb[4] = b;
+    tmp.coeff.push_back(0);
+    tmp.degree = 0;
+    tb.push_back(tmp);
+    tmp.coeff.clear();
+
+    tmp.coeff.push_back(1);
+    tmp.degree = 0;
+    tb.push_back(tmp);
+    tmp.coeff.clear();
+
+    tb.push_back(b);
     (*res).push_back(tb);
 
     size_t i = 2;
     while (1)
     {
-        Poly *tmp = new Poly[5];
+        std::vector <Poly> tmpv;
+        tmpv.resize(5);
         Poly rz,rm;
         poly_div((*res)[i-2][4],(*res)[i-1][4],&rz,&rm,Z);
-        tmp[0].coeff.push_back(i);
-        tmp[0].degree = 0;
-        tmp[1] = rz;
-        tmp[2] = (*res)[i-2][2] - (*res)[i-1][2]*tmp[1];
-        tmp[3] = (*res)[i-2][3] - (*res)[i-1][3]*tmp[1];
-        tmp[4] = rm;
+        tmpv[0].coeff.push_back(i);
+        tmpv[0].degree = 0;
+        tmpv[1] = rz;
+        tmpv[2] = (*res)[i-2][2] - (*res)[i-1][2]*tmpv[1];
+        tmpv[2] = tmpv[2].norm_Z(Z);
+        tmpv[3] = (*res)[i-2][3] - (*res)[i-1][3]*tmpv[1];
+        tmpv[3] = tmpv[3].norm_Z(Z);
+        tmpv[4] = rm;
 
 
 
-        if (tmp[4].degree < b.degree)
+        if (tmpv[4].degree == 0 && tmpv[4].coeff[0] == 0)
         {
-            res->push_back(tmp);
+            tmpv.clear();
             break;
         }
         else
         {
-            res->push_back(tmp);
+            res->push_back(tmpv);
             i++;
         }
     }
 
-    return (*res)[i][4];
+    return (*res)[i-1][4];
 }
 
 
+Poly rem_mulP(Poly a, Poly b, Poly m, std::vector <std::vector<Poly>> *res, unsigned int Z)
+{
+    size_t i = 0;
+
+    while (1)
+    {
+        std::vector<Poly> tmp;
+        tmp.resize(5);
+        tmp[0].degree = 0;
+        tmp[0].coeff.push_back(i);
+        if (i == 0)
+        {
+            tmp[1] = a.norm_Z(Z);
+            tmp[2] = b.norm_Z(Z);
+            tmp[3] = tmp[2];
+            tmp[3].coeff.insert(tmp[3].coeff.begin(),0);
+            tmp[3].degree++;
+            tmp[4].degree = 0;
+            tmp[4].coeff.push_back(0);
+        }
+        else
+        {
+            tmp[1] = (*res)[i-1][1];
+            tmp[1].coeff.erase(tmp[1].coeff.begin());
+            tmp[1].degree--;
+            tmp[2] = (*res)[i-1][3].norm_ext(Z,m);
+            tmp[3] = tmp[2];
+            tmp[3].coeff.insert(tmp[3].coeff.begin(),0);
+            tmp[3].degree++;
+            if((*res)[i-1][1].coeff[0] != 0)
+            {
+                tmp[4] = ((*res)[i-1][4] +   ((*res)[i-1][1].coeff[0]*(*res)[i-1][2]));
+                tmp[4] = tmp[4].norm_ext(Z,m);
+            }
+            else
+            {
+                tmp[4] = (*res)[i-1][4].norm_Z(Z);
+            }
+        }
+        res->push_back(tmp);
+        if (tmp[1].degree == 0)
+        {
+            break;
+        }
+        else
+        {
+            i++;
+        }
+    }
+
+    Poly ans = ((*res)[i][1].coeff[0]*(*res)[i][2]+(*res)[i][4]);
+    return ans.norm_Z(Z);
+
+
+}

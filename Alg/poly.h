@@ -26,6 +26,7 @@ public:
 };
 
 void poly_div(Poly, Poly, Poly*, Poly*, int);
-Poly euclidP(Poly a, Poly b, std::vector<Poly *> *res, unsigned int Z);
+Poly euclidP(Poly a, Poly b, std::vector<std::vector<Poly>> *res, unsigned int Z);
+Poly rem_mulP(Poly a, Poly b, Poly m, std::vector <std::vector<Poly>> *res, unsigned int Z);
 
 #endif // POLY_H

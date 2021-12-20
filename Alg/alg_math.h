@@ -7,14 +7,6 @@
 #include <rem_exp.h>
 
 
-enum alg_names
-{
-    KARATSUBA = 0,
-    EUCLID,
-    REM_MUL,
-    REM_EXP,
-    TEST,
 
-};
 
 #endif // ALG_MATH_H
