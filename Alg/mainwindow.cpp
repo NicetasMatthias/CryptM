@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     ws.push_back(win_setup(true,true,true,false,false,false,"показатель","основание","модуль","","",""));
     ws.push_back(win_setup(false,false,false,true,true,false,"","","","P1","P2",""));//евклид для полиномов
     ws.push_back(win_setup(false,false,false,true,true,true,"","","","модуль m(x)","P1","P2"));//евклид для полиномов
-    ws.push_back(win_setup(false,false,false,false,false,false,"test","test","test","test","test","test"));
+    //ws.push_back(win_setup(false,false,false,false,false,false,"test","test","test","test","test","test"));
 
     pa.push_back(ui->lineEdit_pc_a_0);
     pa.push_back(ui->lineEdit_pc_a_1);
@@ -56,8 +56,8 @@ MainWindow::MainWindow(QWidget *parent)
                 << "Остаток от умножения"
                 << "Остаток от степени"
                 << "Алгоритм Евклида (полиномы)"
-                << "Остаток от умножения (полиномы)"
-                << "test";
+                << "Остаток от умножения (полиномы)";
+                //<< "test";
     ui->comboBox->addItems(alg_names);
 
 
@@ -93,6 +93,10 @@ void MainWindow::on_pushButton_clicked()
     }
     case EUCLID:
     {
+        if (ui->lineEdit_a->text().toLongLong()==0 || ui->lineEdit_b->text().toLongLong()==0)
+        {
+            return;
+        }
         std::vector <long*> *res = new std::vector <long*>;
         long long nod = euclid(ui->lineEdit_a->text().toLongLong(),ui->lineEdit_b->text().toLongLong(),res);
 
@@ -112,6 +116,10 @@ void MainWindow::on_pushButton_clicked()
     }
     case REM_MUL:
     {
+        if (ui->lineEdit_c->text().toLongLong() == 0)
+        {
+            return;
+        }
         std::vector <long*> *res = new std::vector <long*>;
         long long mul = rem_mul(ui->lineEdit_a->text().toLongLong(),ui->lineEdit_b->text().toLongLong(),ui->lineEdit_c->text().toLongLong(),res);
         text += "Результат: " + QString::number(mul) + "\n";
@@ -129,6 +137,10 @@ void MainWindow::on_pushButton_clicked()
     }
     case REM_EXP:
     {
+        if (ui->lineEdit_c->text().toLongLong() == 0)
+        {
+            return;
+        }
         std::vector <long*> *res = new std::vector <long*>;
         long long mul = rem_exp(ui->lineEdit_a->text().toLongLong(),ui->lineEdit_b->text().toLongLong(),ui->lineEdit_c->text().toLongLong(),res);
         text += "Результат: " + QString::number(mul) + "\n";
@@ -146,6 +158,10 @@ void MainWindow::on_pushButton_clicked()
     }
     case EUCLID_POLY:
     {
+        if (ui->lineEdit_z->text().toLongLong() == 0)
+        {
+            return;
+        }
         //тут почитаем и закинем в функцию все что нужно
         Poly t1,t2;
         int Z = ui->lineEdit_z->text().toInt();
@@ -169,6 +185,10 @@ void MainWindow::on_pushButton_clicked()
     }
     case REM_MUL_POLY:
     {
+        if (ui->lineEdit_z->text().toLongLong() == 0)
+        {
+            return;
+        }
         Poly t1,t2,m;
         int Z = ui->lineEdit_z->text().toInt();
 
